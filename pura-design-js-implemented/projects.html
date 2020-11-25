@@ -57,8 +57,15 @@
           restaurants, offices, shops and other.
         </p>
       </div>
-      <div class="gallery_container">
-        <a href="almodovar.html" class="project1">
+      <div class="tabs">
+        <button class="btn apartmentsBtn active">Apartments</button>
+        <button class="btn housesBtn">Houses</button>
+        <button class="btn otherBtn">Other</button>
+      </div>
+
+
+      <div class="gallery_container apartments_gallery current">
+        <a href="almodovar.html">
           <img src="images/gallery_1.jpg" alt="Almodovar Project" />
           <div class="hover_background"></div>
           <div class="circle_more">More</div>
@@ -72,13 +79,6 @@
           <h3>Apartment</h3>
           <h2>Artist's Apartment</h2>
         </a>
-        <a href="#" class="project3">
-          <img src="images/gallery_3.jpg" alt="Stone and wood" />
-          <div class="hover_background"></div>
-          <div class="circle_more">More</div>
-          <h3>Bathroom</h3>
-          <h2>Stone and wood</h2>
-        </a>
         <a href="#" class="project4">
           <img src="images/gallery_4.jpg" alt="Airbnb Fish" />
           <div class="hover_background"></div>
@@ -86,18 +86,28 @@
           <h3>Apartment for rent</h3>
           <h2>Airbnb Fish</h2>
         </a>
+        <a href="#" class="project8">
+          <img src="images/gallery_8.jpg" alt="Herringbone Pattern" />
+          <div class="hover_background"></div>
+          <div class="circle_more">More</div>
+          <h3>Apartment</h3>
+          <h2>Herringbone Pattern</h2>
+        </a>
+      </div>
+
+      <div class="gallery_container houses_gallery">
         <a href="#" class="project5">
           <img src="images/gallery_5.jpg" alt="Tropical" />
           <div class="hover_background"></div>
           <div class="circle_more">More</div>
-          <h3>Bedroom</h3>
+          <h3>House</h3>
           <h2>Tropical</h2>
         </a>
         <a href="#" class="project6">
           <img src="images/gallery_6.jpg" alt="Italian Elegance" />
           <div class="hover_background"></div>
           <div class="circle_more">More</div>
-          <h3>Apartment</h3>
+          <h3>House</h3>
           <h2>Italian Elegance</h2>
         </a>
         <a href="#" class="project7">
@@ -107,26 +117,29 @@
           <h3>House</h3>
           <h2>Green and powder pink</h2>
         </a>
-        <a href="#" class="project8">
-          <img src="images/gallery_8.jpg" alt="Herringbone Pattern" />
-          <div class="hover_background"></div>
-          <div class="circle_more">More</div>
-          <h3>Apartment</h3>
-          <h2>Herringbone Pattern</h2>
-        </a>
         <a href="#" class="project9">
           <img src="images/gallery_9.jpg" alt="Pastel Forest" />
           <div class="hover_background"></div>
           <div class="circle_more">More</div>
-          <h3>Children's Room</h3>
+          <h3>House</h3>
           <h2>Pastel Forest</h2>
         </a>
+      </div>
+
+      <div class="gallery_container other_gallery">
         <a href="#" class="project10">
           <img src="images/gallery_10.jpg" alt="Armchair Felix" />
           <div class="hover_background"></div>
           <div class="circle_more">More</div>
           <h3>Furniture</h3>
           <h2>Armchair Felix</h2>
+        </a>
+        <a href="#" class="project3">
+          <img src="images/gallery_3.jpg" alt="Stone and wood" />
+          <div class="hover_background"></div>
+          <div class="circle_more">More</div>
+          <h3>Bathroom</h3>
+          <h2>Stone and wood</h2>
         </a>
       </div>
 
@@ -147,5 +160,6 @@
       </div>
       <a href="#top"><img src="images/scroll_up.svg" alt="scroll_up" /></a>
     </footer>
+    <script src="./js/tabs_projects.js"></script>
   </body>
 </html>

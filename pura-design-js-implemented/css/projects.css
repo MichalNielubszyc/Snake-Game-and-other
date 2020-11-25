@@ -17,11 +17,42 @@
     word-spacing: 2px;
 }
 
+
+/**************TABS********************/
+
+.tabs{
+    display: flex;
+    justify-content: center;
+}
+
+.tabs .btn{
+    width: 33.333%;
+    border: none;
+    background-color: #BBA598;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: 900;
+    padding: 20px;
+    cursor: pointer;
+    letter-spacing: 5px;
+}
+
+.tabs .btn:focus{
+    outline: none;
+}
+
+.tabs .btn.active{
+    background-color: #251f1f;
+    color: white;
+    transition: 0.3s;
+}
+
+
+/**************TAB CONTAINERS*********************/
+
 .gallery_container{
-    display: grid;
-    grid-template-areas: 
-    "project1"
-    "project2";
+   display: flex;
+   flex-direction: column;
     gap: 10px;
     padding: 30px;
     background-color: white;
@@ -72,21 +103,23 @@
     .banner{
         padding-top: 30px;
     }
+
+
+/***************TAB CONTENT*******************/
     .gallery_container{
+        display: none;
         grid-template-columns: 1fr 1fr;
-        grid-template-areas: 
-        "project1 project2"
-        "project3 project4"
-        "project5 project6"
-        "project7 project8"
-        "project9 project10";
         gap: 30px;
+        /* transition: 0.8s; */
     }    
-    .gallery_container img{
-        display: block;
-        width: 100%;
-        height: auto;
+  
+    .gallery_container.current{
+        display: grid;
+        /* transition: 0.8s; */
     }
+
+
+/*********************************************/
 
     .gallery_container a h3, h2{
         display: none;
