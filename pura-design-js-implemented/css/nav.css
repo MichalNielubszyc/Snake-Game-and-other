@@ -1,0 +1,225 @@
+*{
+    box-sizing: border-box;
+    text-decoration: none;
+    scroll-behavior: smooth;
+}
+
+body{
+    font-family: 'Rubik', sans-serif;
+    margin: 0 auto;
+}
+
+/***NAVIGATION**/
+
+/**zdaję sobie sprawę, że kod css nawigacji jest za długi i lepiej było zastosować zasadę mobile-first i tylko jedno media-query, ale naprawianie tego w tym momencie byłoby koszmarem, na przyszłość będę stosował tą zasadę**/
+
+/***MOBILE**/
+
+@media(max-width: 1099px){
+    nav{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 0px;
+        padding: 20px 0px 20px;
+        background-color: white;
+        position: absolute;
+        z-index: 1;
+    }
+    
+    .nav_buttons{
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    
+    .nav_buttons .menu{
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    a.mobile_logo{
+        width: 180px;
+        height: 60px;
+        background-image: url(images/logo_footer.svg);
+        background-repeat: no-repeat; 
+        background-size: contain; 
+        background-position: center;
+    }
+
+    nav img.logo{
+        opacity: 0;
+    }
+    
+    nav .hamburger_button img {
+        width: 60px;
+        margin-left: 30px;
+      }
+
+    nav a{
+        color: rgb(0, 0, 0);
+        margin-right: 30px;
+        text-transform: uppercase;
+        font-weight: 900;
+        font-size: 14px;
+    }
+
+    .nav_buttons > a{
+    border-bottom: 2px solid white;
+    }
+    
+    .nav_buttons > a:hover{
+        border-bottom: 2px solid #BBA598;
+    }
+
+    .nav_buttons > a, .social a{
+        display: none;
+    }
+
+    nav:hover .nav_buttons > a, nav:hover .social a{
+        display: flex;
+        margin: 15px 30px;
+        font-size: 1.5em;
+    }
+    
+    .selected{
+        border-bottom: 2px solid #BBA598;
+    }
+    
+    .social{
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+    }
+    
+    .social a{
+        font-size: 25px;
+    }
+    
+    .social a.lang{
+        font-size: 14px;
+    }
+    
+    .social a.light{
+        font-weight: 200;
+    }
+
+    .button{
+        padding: 12px;
+        border-radius: 10px;
+        background-color: #251f1f;
+        border: none;
+        font-size: 12px;
+        color: white;
+        text-transform: uppercase;
+        font-weight: 900;
+        letter-spacing: 3px;
+        margin: 10px 0 0;
+        transition: 0.3s;
+    }
+    
+    .button:hover{
+        background-color: white;
+        color: #251f1f ;
+    }
+    }
+
+/***DESKTOP**/
+
+@media(min-width: 1100px){
+
+body{
+    padding-top: 104.938px;
+}
+
+#top{
+    position: relative;
+    top: -104.938px;
+}
+
+nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    padding: 10px 0px 5px;
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.nav_buttons{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+nav img{
+    width: 85px;
+    margin-left: 30px;
+}
+
+nav .hamburger_button {
+    display: none;
+}
+
+nav a{
+    color: rgb(0, 0, 0);
+    margin-right: 40px;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 14px;
+}
+
+.nav_buttons > a{
+    border-bottom: 2px solid #fff;
+}
+
+.nav_buttons > a:hover{
+    border-bottom: 2px solid #BBA598;
+}
+
+.nav_buttons > a.selected{
+    border-bottom: 2px solid #BBA598;
+}
+
+.social{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-right: 40px;
+}
+
+.social a{
+    font-size: 25px;
+}
+
+.social a.lang{
+    font-size: 14px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.button{
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #251f1f;
+    border: none;
+    font-size: 14px;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin: 10px 0 0;
+    transition: 0.3s;
+    margin-top: 30px;
+}
+
+.button:hover{
+    background-color: white;
+    color: #251f1f ;
+}
+}

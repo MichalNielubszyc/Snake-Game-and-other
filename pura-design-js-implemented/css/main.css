@@ -1,0 +1,88 @@
+/***WRAPPER**/
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    background-color: #BBA598;
+    padding-top: 104px;
+}
+
+.wrapper .left_column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    margin: 30px 0;
+}
+
+.wrapper .left_column .motto{
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper .motto p{
+    font-size: 16px;
+    margin: 0 auto;
+}
+
+.wrapper .motto h1{
+    font-size: 28px;
+    margin: 0 auto;
+    letter-spacing: 5px;
+}
+
+img.wrapper_image{
+    max-width: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    position: absolute;
+    right: 0;
+    height: calc(100vh - 104px);
+    object-fit: cover;
+}
+
+@media(min-width: 1100px){
+    .wrapper{
+        flex-direction: row;
+        justify-content: space-between;
+        padding-top: 0px;
+        height: calc(100vh - 104px);
+    }
+    
+    .wrapper .left_column{
+        margin-left: 35px;
+        align-items: flex-start;
+    }
+    
+    .wrapper .motto p{
+        font-size: 20px;
+        margin: 0;
+    }
+    
+    .wrapper .motto h1{
+        font-size: 55px;
+        margin: 0;
+    }
+    
+    img.wrapper_image{
+        clip-path: circle(88.3% at 89% 49%);
+        max-width: 60%;
+        height: calc(100vh - 104px);
+    }
+}
+
+@media(min-width: 1600px){  
+    .wrapper .left_column{
+        margin-left: 120px;
+    }
+
+    .wrapper .left_column .motto h1{
+        font-size: 65px;
+        margin-right: 20px;
+    }
+
+    .wrapper .left_column .motto p{
+        font-size: 32px;
+    }
+}

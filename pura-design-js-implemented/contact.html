@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <link rel="stylesheet" href="./css/nav.css">
+    <link rel="stylesheet" href="./css/contact.css">
+    <link rel="stylesheet" href="./css/footer.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="images/logo.svg" type="image/x-icon">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7QtKmnrohjQL1-MbPjvJBM3z6kBEsyVo&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+    <script src="./index.js"></script>
+</head>
+
+<body>
+    <main>
+        <a href="" id="top"></a>
+        <nav>
+            <div class="nav_buttons">
+                <div class="menu">
+                    <div class="hamburger_button"><img src="images/1200px-Hamburger_icon.svg.webp"
+                            alt="hamburger_button_img"></div>
+                    <a href="index.html" class="mobile_logo"><img class="logo" src="images/logo.svg" alt="logo"></a>
+                </div>
+                <a href="index.html">Home</a>
+                <a href="projects.html">Projects</a>
+                <a href="#">Services</a>
+                <a href="#">About us</a>
+                <a href="#" class="selected">Contact</a>
+            </div>
+            <div class="social">
+                <a href="https://www.facebook.com/puradesign/" target="blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/puradesign_/" target="blank"><i class="fab fa-instagram"></i></a>
+                <a class="lang" href="#">PL</a>
+                <a class="lang selected" href="#">EN</a>
+            </div>
+        </nav>
+
+        <section class="contact_links">
+            <div class="banner">
+                <h1 class="light">Let's get to know each other!</h1>
+                <h1 class="bold">Write or call us</h1>
+            </div>
+            <div class="contact_links_direct">
+                <div class="circle"></div>
+                <div class="contact_links_text">
+                    <p>Call</p>
+                    <a href="tel:690 555 001">690 555 001</a>
+                </div>
+            </div>
+            <div class="contact_links_direct">
+                <div class="circle"></div>
+                <div class="contact_links_text">
+                    <p>Write</p>
+                    <a href="mailto:biuro@puradesign.pl">biuro@puradesign.pl</a>
+                </div>
+            </div>
+            <div class="contact_links_direct">
+                <div class="circle"></div>
+                <div class="contact_links_text">
+                    <p>Visit our studio</p>
+                    <a href="">Okrętowa 16B/2</a>
+                    <a href="">81-449 Gdynia</a>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <form action="" method="POST">
+            <input type="name" name="name" id="name" placeholder="Name and surname*" required>
+            <input type="email" name="email" id="email" placeholder="E-mail address*" required>
+            <input type="phone" name="phone" id="phone" placeholder="Phone number">
+            <input type="text" name="company" id="company" placeholder="Company">
+            <textarea name="message" id="message" placeholder="Message" required></textarea>
+            <div class="checkbox">
+                <label class="square">
+                    <input type="checkbox" name="personal_data" id="personal_data" class="single_checkbox" required>
+                    <span></span>
+                </label>
+                <label for="personal_data">By clicking "send" you agree to the processing of personal data by PURA
+                    design
+                    based in Gdynia, ul. Okrętowa 16B / 2 in order to present the commercial offer to the e-mail address
+                    or
+                    telephone number given in the contact form above. At the same time, I acknowledge that I have the
+                    right
+                    to access my data, the ability to correct it and request to stop processing it by sending an e-mail
+                    to
+                    the address biuro@puradesign.pl from the address to which the consent relates.</label>
+            </div>
+            <div class="checkbox">
+                <label class="square">
+                    <input type="checkbox" name="personal_data" id="personal_data" class="single_checkbox" required>
+                    <span></span>
+                </label>
+                <label for="personal_data">I declare that I have stayed with the privacy policy.</label>
+            </div>
+            <input type="number" name="company" id="company" placeholder="Type the result of: 14+17=?" required>
+            <input type="submit" value="Send" class="submit">
+        </form>
+    </main>
+    <div id="map"></div>
+    <footer>
+        <div class="footer_text">
+            <a class="footer_image" href="#"><img src="images/logo_footer.svg" alt="footer_image"></a>
+            <span>- biuro@puradesign.pl</span>
+            <span>- 690 555 001</span>
+            <span>- 81-449 Gdynia ul.Okrętowa 16b/2</span>
+        </div>
+        <a href="#top"><img src="images/scroll_up.svg" alt="scroll_up"></a>
+    </footer>
+</body>
+
+</html>
