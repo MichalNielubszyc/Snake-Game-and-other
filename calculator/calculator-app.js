@@ -1,4 +1,4 @@
-// Podstawowym zagadnieniem jest stworzenie obiektu calculator, w którym zapisujemy wszystkie wyklikane liczby i operacje. Obiekt posiada parametry jak operands i operator oraz screenValue
+// Creating an object 'calculator' which has parameters such as operands, operator and screenValue
 
 const calculator = {
     screenValue: '0',
@@ -7,18 +7,31 @@ const calculator = {
     operator: null
 };
 
-// Funkcja, która dodaje cyfry w screenValue w zależności czy dotychczas było tam 0 czy już jakaś cyfra. Nie potrafię obsługiwać wyrażeń z '?' dlatego wykonuję ze zwykłym wyrażeniem 'if else'
+// Function which adds numbers from event.target to the 'object' parameter 'screenValue' 
 
 function addNumber(number){
-    if(calculator.screenValue === '0'){
+    // this changes the display on calculator screen , if there already is firstOperand, than replace it with secondOperand
+
+// PROBLEMS!!!!!
+
+    if (calculator.waitingForSecondOperand === true){
         calculator.screenValue = number;
+        debugger
+        calculator.waitingForSecondOperand = false;
     }else{
-        calculator.screenValue = calculator.screenValue + number;
+        // Explanation: Conditional (ternary) operator : a condition followed by a question mark (?), then an expression to execute if the condition is truthy followed by a colon (:), and finally the expression to execute if the condition is falsy.
+        calculator.screenValue === '0' ? calculator.screenValue = number : calculator.screenValue = calculator.screenValue + number ;
     }
-    console.log(calculator);
+    // my old code, to be removed at the end
+    // if(calculator.screenValue === '0'){
+    //     calculator.screenValue = number;
+    // }else if(calculator.waitingForSecondOperand === false){
+    //     debugger
+    //     calculator.screenValue = calculator.screenValue + number;
+    // }
 }
 
-// Funkcja dodająca separator dziesiętny. Sprawdza czy obiekt calculator posiada już element dot, jeśli nie, to dodaje go.
+// Function whick adds decimal , first checking if decimals already is in calculator.screenValue
 
 function addDecimal(dot){
     if(!calculator.screenValue.includes(dot)){
@@ -28,18 +41,28 @@ function addDecimal(dot){
 }
 
 
-// Funkcja, która obsługuje kliknięcia przycisków funkcyjnych (operatorów)
+// Function which organizes cooperation between first and second operand and operator
 
-// 1 przypadek - naciskamy operator po wprowadzeniu pierwszej liczby (firstOperand)
+// 1st case - we click the operator after entering first number (firstOperand)
 
 function handleOperator(nextOperator){
     // destructure propsów obiektu calculator
     const { firstOperand, screenValue, operator} = calculator;
-    // za pomocą parseFloat zmieniamy stringa przechowywanego w calculator.screenValue w liczbę z miejscami po przecinku
+    // using parseFloat change string calculator.screenValue into a number with decimals
     const inputValue = parseFloat(screenValue);
-    //sprawdzenie czy firstOperand jest null (powinien być jeśli to pierwsze działanie) oraz czy inputValue jest numberem
+
+    // checking if firstOperand === null (should be if it's the first action) and if inputValue is a number
     if (firstOperand === null && !isNaN(inputValue)){
         calculator.firstOperand = inputValue;
+        
+    // checking if operator was clicked, then give the result
+    } else if (operator) {
+        const result = calculate(firstOperand, inputValue, operator);
+
+// PROBLEMS!!!!!
+
+        calculator.screenValue = String(result);
+        calculator.firstOperand = result;
     }
 
     calculator.waitingForSecondOperand = true;
@@ -48,30 +71,47 @@ function handleOperator(nextOperator){
     console.log(calculator);
 }
 
-// Funkcja służy do przerzucenia na display kalkulatora wartości screenValue, którą pobieram z obiektu calculator, do którego trafia ona z kolei na podstawie event.targetów 
+// 2nd case - when the user has entered the second operand and we need to check which operator was entered
+
+function calculate(firstOperand, secondOperand, operator){
+    if (operator === '+'){
+        return firstOperand + secondOperand;
+    } else if ( operator === '-' ){
+        return firstOperand - secondOperand;
+    } else if ( operator === 'x'){
+        return firstOperand * secondOperand;
+    } else if ( operator === '/'){
+        return firstOperand / secondOperand;
+    }
+
+    return secondOperand
+}
+
+// Function takes calculator.screenValue to the element holding display (screen) in html. calculator.screenValue is taken from event.listener -> event.target
 
 function updateScreen(){
     const screen = document.querySelector('.screen');
     screen.innerHTML = calculator.screenValue;
 }
 
-// Generalnie event listener przypisujemy całemu kontenerowi i okresleniami warunkowymi (przy pomocy .matches, które łapie elementy o określonej klasie) przypisujemy konkretnym typom przycisków konkretne działania, różne dla każdego typu. Wartością każdego kliknięcia jest event.target.innerHTML
+// We give eventListener to the whole container and using 'if' statements and .matches (catching elements of certain class) we give specific types of buttons specific actions. The value of every click is event.target.innerHTML
 
 const calculatorButtons = document.querySelector('.calculatorContainer');
 
 calculatorButtons.addEventListener('click', (event) =>{
-    //jeśli kliknięte pole nie jest buttonem, wyjdź z funkcji
-    console.log(event.target)
+    //if clicked element is not a button - return
     if (!event.target.matches('button')){
         return;
     }
     if (event.target.matches('.operator')){
+        debugger
         handleOperator(event.target.innerHTML);
         updateScreen();
     }
-    if (event.target.matches('.allClear')){
-        return;
-    }
+    //  not done yet
+    // if (event.target.matches('.allClear')){
+    //     return;
+    // }
     if (event.target.matches('.decimal')){
         addDecimal(event.target.innerHTML)
         updateScreen()
