@@ -1,4 +1,5 @@
-// Calculator with operands and operator as an object
+// Calculator with operands and operator as an object.
+// Podstawowym zagadnieniem jest stworzenie obiektu calculator, w którym zapisujemy wszystkie wyklikane liczby i operacje. 
 
 const calculator = {
     screenValue: '0',
@@ -17,7 +18,7 @@ function addNumber(number){
     }
 }
 
-// Funkcja dodająca separator dziesiętny
+// Funkcja dodająca separator dziesiętny. Sprawdza czy obiekt calculator posiada już element dot, jeśli nie, to dodaje go.
 
 function addDecimal(dot){
     if(!calculator.screenValue.includes(dot)){
@@ -34,6 +35,7 @@ function updateScreen(){
 }
 
 // Event Listener for all calculator buttons, using event delegation
+// Generalnie event listener przypisujemy całemu kontenerowi i okresleniami warunkowymi (przy pomocy .matches, które łapie elementy o określonej klasie) przypisujemy konkretnym typom przycisków konkretne działania, różne dla każdego typu. Wartością każdego kliknięcia jest event.target.innerHTML
 
 const calculatorButtons = document.querySelector('.calculatorContainer');
 
