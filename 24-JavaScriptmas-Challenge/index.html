@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24-JavaScriptmas-Challenge</title>
+</head>
+<body>
+    
+</body>
+<script>
+    ////////////////////////// day 1
+    function candies(children, candy) {
+    //  write code here.
+    return children * (Math.floor(candy/children));
+}
+
+/**
+* Test Suite 
+*/
+describe('candies()', () => {
+    it('returns ammount of total equal candy to be eaten', () => {
+        // arrange
+        const children = 3;
+        const candy = 10;
+        
+        // act
+        const result = candies(children, candy);
+
+        // log
+        console.log("result: ", result);
+        
+        // assert
+        expect(result).toBe(9);
+    });
+});
+    /////////////////////////////// day 2
+    function depositProfit(deposit, rate, threshold) {
+    //  write code here.
+    let gain = 20;
+    let years = 1;
+    while(gain<(threshold-deposit)){
+        years++;
+        gain = 2*gain + gain*(rate/100); 
+        }
+        return(years)
+    }
+
+
+
+/**
+* Test Suite 
+*/
+describe('depositProfit()', () => {
+    it('returns number of years it will take to hit threshold based off of deposit & rate', () => {
+        // arrange
+        const deposit = 100;
+        const rate = 20;
+        const threshold = 170;
+        
+        // act
+        const result = depositProfit(deposit, rate, threshold)
+
+        // log
+        console.log("result: ", result);
+        
+        // assert
+        expect(result).toBe(3);
+    });
+});
+    /////////////////////////////// day 3
+    function chunkyMonkey(values, size) {
+    //  write code here.
+    return [values.slice(0,size), values.slice(size)]
+}
+
+
+
+/**
+* Test Suite 
+*/
+describe('chunkyMonkey()', () => {
+    it('returns largest positive integer possible for digit count', () => {
+        // arrange
+        const values = ["a", "b", "c", "d"];
+        const size = 2;
+        
+        // act
+        const result = chunkyMonkey(values, size);
+
+        // log
+        console.log("result: ", result);
+        
+        // assert
+        expect(result).toEqual([["a", "b"], ["c", "d"]]);
+    });
+});
+    /////////////////////////////// day 4
+    function centuryFromYear(num) {
+    //  write code here.
+    return Math.ceil(num/100);
+}
+
+
+
+/**
+* Test Suite 
+*/
+describe('centuryFromYear()', () => {
+    it('returns current century', () => {
+        // arrange
+        const year = 1905;
+        
+        // act
+        const result = centuryFromYear(year);
+
+        // log
+        console.log("result 1: ", result);
+        
+        // assert
+        expect(result).toBe(20);
+    });
+    
+    it('returns current century for edge case of start of century', () => {
+        // arrange
+        const year = 1700;
+        
+        // act
+        const result = centuryFromYear(year);
+
+        // log
+        console.log("result 2: ", result);
+        
+        // assert
+        expect(result).toBe(17);
+    });    
+});
+
+</script>
+
+</html>
