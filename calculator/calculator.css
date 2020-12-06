@@ -36,6 +36,11 @@ button{
     background-color: #BDD1D8;
 }
 
+.ac{
+    grid-area: 2 / 1 / 3 / 3;
+    background-color: #C68465 ;
+}
+
 .sum{
     grid-area: 5 / 5 / 7 / 4;
 }
@@ -44,7 +49,7 @@ button{
     grid-area: 6 / 3 / 7 /1;
 }
 
-.ac , .del, .divide, .multiply, .plus, .minus, .sum{
+.del, .divide, .multiply, .plus, .minus, .sum{
     background-color: #666A6C;
 }
 

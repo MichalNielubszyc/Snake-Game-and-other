@@ -1,3 +1,5 @@
+/////////////////////1st step: CALCULATOR OBJECT////////////////////////////////////
+
 // Creating an object 'calculator' which has parameters such as operands, operator and screenValue
 
 const calculator = {
@@ -7,16 +9,15 @@ const calculator = {
     operator: null
 };
 
+//////////3rd step: CALCULATOR FUNCTIONALITY: FUNCTIONS FIRED BY EVENT LISTENER WHEN CLICKING PARTICULAR CALCULATOR BUTTONS/////////
+
 // Function which adds numbers from event.target to the 'object' parameter 'screenValue' 
 
 function addNumber(number){
     // this changes the display on calculator screen , if there already is firstOperand, than replace it with secondOperand
 
-// PROBLEMS!!!!!
-
     if (calculator.waitingForSecondOperand === true){
         calculator.screenValue = number;
-        debugger
         calculator.waitingForSecondOperand = false;
     }else{
         // Explanation: Conditional (ternary) operator : a condition followed by a question mark (?), then an expression to execute if the condition is truthy followed by a colon (:), and finally the expression to execute if the condition is falsy.
@@ -46,7 +47,7 @@ function addDecimal(dot){
 // 1st case - we click the operator after entering first number (firstOperand)
 
 function handleOperator(nextOperator){
-    // destructure propsów obiektu calculator
+    // destructure of calculator object properties
     const { firstOperand, screenValue, operator} = calculator;
     // using parseFloat change string calculator.screenValue into a number with decimals
     const inputValue = parseFloat(screenValue);
@@ -58,9 +59,6 @@ function handleOperator(nextOperator){
     // checking if operator was clicked, then give the result
     } else if (operator) {
         const result = calculate(firstOperand, inputValue, operator);
-
-// PROBLEMS!!!!!
-
         calculator.screenValue = String(result);
         calculator.firstOperand = result;
     }
@@ -87,12 +85,23 @@ function calculate(firstOperand, secondOperand, operator){
     return secondOperand
 }
 
+// Function which resets calculator
+
+function resetCalculator(){
+    calculator.screenValue ='0';
+    calculator.firstOperand = null; 
+    calculator.waitingForSecondOperand = false;
+    calculator.operator = null;
+}
+
 // Function takes calculator.screenValue to the element holding display (screen) in html. calculator.screenValue is taken from event.listener -> event.target
 
 function updateScreen(){
     const screen = document.querySelector('.screen');
     screen.innerHTML = calculator.screenValue;
 }
+
+////////2nd step: EVENT LISTENERS FOR CALCULATOR BUTTONS///////////
 
 // We give eventListener to the whole container and using 'if' statements and .matches (catching elements of certain class) we give specific types of buttons specific actions. The value of every click is event.target.innerHTML
 
@@ -104,21 +113,19 @@ calculatorButtons.addEventListener('click', (event) =>{
         return;
     }
     if (event.target.matches('.operator')){
-        debugger
         handleOperator(event.target.innerHTML);
         updateScreen();
     }
-    //  not done yet
-    // if (event.target.matches('.allClear')){
-    //     return;
-    // }
+    if (event.target.matches('.allClear')){
+        resetCalculator();
+        updateScreen();
+    }
     if (event.target.matches('.decimal')){
         addDecimal(event.target.innerHTML)
         updateScreen()
-    }else{
-        // console.log('digit', event.target.innerHTML);    
+    }else if(event.target.matches('.number')){
+        console.log('digit', event.target.innerHTML);    
         addNumber(event.target.innerHTML);
         updateScreen();
     }
-    
 })
