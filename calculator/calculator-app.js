@@ -76,7 +76,7 @@ function calculate(firstOperand, secondOperand, operator){
         return firstOperand + secondOperand;
     } else if ( operator === '-' ){
         return firstOperand - secondOperand;
-    } else if ( operator === 'x'){
+    } else if ( operator === 'X'){
         return firstOperand * secondOperand;
     } else if ( operator === '/'){
         return firstOperand / secondOperand;
