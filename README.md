@@ -2,9 +2,11 @@
 
 [Link to my ISA Project 2: JavaScript Filled Pura Design Webpage from Project 1](https://michalnielubszyc.github.io/jfdzr2-project-2/pura-design-js-implemented/index.html)
 
-Work done: Slideshow on Main Page, Tab Container on Projects Page, Slider on Almodovar Page (to be fixed).
+Work done: Slideshow on Main Page, Tab Container on Projects Page, Slider on Almodovar Page (to be fixed). Inspiration : https://puradesign.pl/english
 
-Inspiration : https://puradesign.pl/english
+[Link to my Calculator](https://michalnielubszyc.github.io/jfdzr2-project-2/calculator/index.html)
+
+
 
 ## Repozytorium dla Projektu nr 2.
 
