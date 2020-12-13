@@ -17,7 +17,7 @@ body{
     grid-template-columns: repeat(21, 1fr);
 }
 
-/* .snake{
+.snake{
     background-color: green;
-    border: solid black;
-} */
+    border: solid black 0.1vmin;
+}
