@@ -2,13 +2,13 @@
 
 Work done:
 
-1. Calculator => [Link to my Calculator](https://michalnielubszyc.github.io/jfdzr2-project-2/calculator/index.html)
+1. [Calculator](https://michalnielubszyc.github.io/jfdzr2-project-2/calculator/index.html)
 
-2. Features (Carousel, Tab Container and Slideshow) => [Pura Design Webpage from Project 1 with added JS](https://michalnielubszyc.github.io/jfdzr2-project-2/pura-design-js-implemented/index.html) Inspiration : https://puradesign.pl/english
+2. [Features (Carousel, Tab Container and Slideshow) for Pura Design Webpage from Project 1 with added JS](https://michalnielubszyc.github.io/jfdzr2-project-2/pura-design-js-implemented/index.html) Inspiration : https://puradesign.pl/english
 
 Work in progress:
 
-3. [Link to my Snake Game](https://michalnielubszyc.github.io/jfdzr2-project-2/snake-game/index.html)
+3. [Snake Game](https://michalnielubszyc.github.io/jfdzr2-project-2/snake-game/index.html)
 
 
 To be done in future:
