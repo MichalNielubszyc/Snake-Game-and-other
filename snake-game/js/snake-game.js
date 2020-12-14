@@ -3,6 +3,7 @@
 const snakeBody = [{x:10, y:11}]
 let victim = { x:10, y:1}
 const gameBoard = document.querySelector('.game-board');
+let gameOver = false;
 // poniższe stałe można zmieniać celem zmiany poziomu trudności
 const SNAKE_SPEED = 5;
 const EXPANSION_RATE = 1;
@@ -12,6 +13,13 @@ const EXPANSION_RATE = 1;
 
 let lastUpdateTime = 0;
 function gameEngine(currentTime){
+    if(gameOver){
+        if(confirm('GAME OVER press ok to restart')){
+            window.location.reload()
+        }
+        return
+    }
+
     window.requestAnimationFrame(gameEngine);
     const timeSinceLastUpdate = (currentTime - lastUpdateTime)/1000;
     if (timeSinceLastUpdate < 1 / SNAKE_SPEED) return
@@ -30,6 +38,8 @@ function render(){
 
 function update(){
     updateSnake();
+    eatVictim();
+    checkGameOver();
 }
 
 
@@ -53,12 +63,15 @@ function renderSnake(){
 
 function updateSnake(){
     const snakeMovement = getUserDirections();
+    addCells();
     for(let i = snakeBody.length - 2; i>=0; i--){
         snakeBody[i+1] = {...snakeBody[i]}
     }
     // Zwiększamy głowie snake'a (snakeBody[0]) wartość x o wartość zmiennej snakeMovement, którą pobieram z obiektu userDirections. UserDirections zmienia się poprzez dodanie eventlistenera ze switchem dla eventu keydown obejmującego strzałki (04). Dzięki czemu wprawiamy snake'a w ruch.
     snakeBody[0].x += snakeMovement.x
     snakeBody[0].y += snakeMovement.y
+
+    
 }
 
 // 04. USER DIRECTIONS ////////////////////////////////////////////////////////
@@ -102,3 +115,70 @@ function renderVictim(){
     victimCell.classList.add('victim');
     gameBoard.appendChild(victimCell)
 }
+
+// 06. EATING VICTIM /////////////////////////////////////////////////////////
+// Funkcja eatVictim() zarządza całym zdarzeniem, gdy którakolwiek komórka snake'a pokrywa się z komórką victima. W tym celu sprawdza warunek z funkcją onSnake(). Jeśli jest ona prawdziwa, wywołuje dwa wyrażenia - funkcję expandSnake, która wydłuża snake'a o zadany EXPANSION_RATE oraz przypisanie obiektowi victim nowych współrzędnych. Funkcja onSnake() sprawdza czy którakolwiek komórka snake'a pokrywa się z victimem. Posługuje się przy tym metodą .some wywołaną na arrayu snakeBody. Funkcja wywołuje kolejną funkcję equalPositions, która ma za argumenty komórkę snake'a i argument przywołany w onSnake (czyli w naszym przypadku będzie tam victim) i wówczas porównuje współrzędne x i y obu tych argumentów. Funkcje onSnake i equalPositions zwracają boolean, także funkcja główna będzie wywołana tylko jeśli oba będą spełnione. Główna funkcja eatVictim jest przekazana do funkcji update(), która jest iterowana co określony przez SNAKE_SPEED czas.
+
+function eatVictim(){
+    if (onSnake(victim)){
+        expandSnake()
+        // victim = { x: 20, y: 10 }
+        victim = randomVictimPosition()
+        console.log(victim)
+    }
+}
+
+function onSnake(position, { ignoreHead = false } = {}){
+    return snakeBody.some((snakeCell, index) => {
+        if (ignoreHead && index === 0) return false
+        return equalPositions(snakeCell, position)
+    })
+}
+
+function equalPositions(pos1, pos2){
+    return pos1.x === pos2.x && pos1.y === pos2.y;
+}
+
+// 07. ADDING NEW SNAKE CELLS ////////////////////////////////////////////////////
+// Przy dodawaniu nowych komórek snake'a kluczową zmienną będzie newCells, do której przy każdym wywołaniu expandSnake będzie dodawana ilość komórek równa zadanej EXPANSION_RATE. Funkcją przekazaną do jednej z głównych funkcji - updateSnake() jest addCells, która pushuje nowy obiekt do  arraya snakeBody tyle razy ile wynosi wartość newCells, czyli tyle ile EXPANSION_RATE. Po każdym dodaniu nowych komórek, po loop break zmienna newCells jest zerowana, inaczej snake wydłużałby się w nieskończoność.
+
+let newCells = 0;
+
+function expandSnake(){
+    newCells += EXPANSION_RATE;
+}
+
+function addCells(){
+    for (let i=0; i < newCells; i++){
+        snakeBody.push({...snakeBody[snakeBody.length - 1]})
+    }
+    newCells = 0;
+}
+
+// 08. RANDOMIZE VICTIM POSITION /////////////////////////////////////////////////
+// Funkcja Math.random() zwraca wartość od 0 do 0,99999 dlatego mnożę ją przez 21
+function randomVictimPosition(){
+    return {
+        x: Math.floor(Math.random() * 21) + 1,
+        y: Math.floor(Math.random() * 21) + 1
+    }
+}
+
+// 09. VERYFYING IF GAME IS OVER ////////////////////////////////////////////////
+
+function checkGameOver() {
+    gameOver = outsideGrid(snakeBody[0]) || snakeIntersection()
+}
+
+function outsideGrid(position){
+    return(
+        position.x < 1 || position.x > 21 ||
+        position.y < 1 || position.y > 21
+    )
+}
+
+function snakeIntersection(){
+    return onSnake(snakeBody[0], { ignoreHead: true })
+}
+
+// Co chcę dodać sam później: 0.uprość kod podobnie jak zrobiłeś z randomVictimPosition 1.wyświetlacz wyników i zapisywanie wyników, możliwość resetowania gry itd 2.przy włączaniu gry wpisywanie nazwy użytkownika i potem zapisywanie wyników poszczególnych użytkowników 3.możliwość ustawiania SNAKE_SPEED i EXPANSION_RATE na stronie 4.włączanie i wyłączanie ścian 5.teleport 
