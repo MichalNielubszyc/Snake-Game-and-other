@@ -1,13 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Snake Game</title>
-    <link rel="stylesheet" href="./snake.css">
+    <link rel="stylesheet" href="./snake.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+    <script src="./js/firebase-config.js"></script>
     <script src="./js/snake-game.js" type="module" defer></script>
-</head>
-<body>
-    <div class="game-board"></div>
-</body>
+  </head>
+  <body>
+    <div class="modal">
+      <div class="game-header">
+        <h1>Frickin' awesome Snake Game!</h1>
+        <img src="./img/snake.png" alt="snake_pic" />
+      </div>
+      <form class="modal_form">
+        <label for="username" class="modal_label">Enter username:</label>
+        <input type="text" class="modal_input" name="username" required />
+        <label for="snakespeed" class="modal_label"
+          >Enter snake speed (1-10):</label
+        >
+        <input type="number" class="modal_input" name="snakespeed" required />
+        <label for="expansionrate" class="modal_label"
+          >Enter snake expansion rate (1-10):</label
+        >
+        <input
+          type="number"
+          class="modal_input"
+          name="expansionrate"
+          required
+        />
+        <label for="walls" class="modal_label">Turn on walls:</label>
+        <input type="checkbox" class="modal_input" name="walls" />
+        <input type="submit" class="modal_input" />
+      </form>
+    </div>
+    <section class="game-settings-column">
+      <div class="user-info">User:</div>
+      <div class="game-time-info">Game time: 0:00</div>
+      <div class="score-info">Your score: 0</div>
+      <div class="snake-speed-info">Snake Speed:</div>
+      <div class="snake-expansion-info">Snake Expansion Rate:</div>
+      <div class="walls-info">Walls:</div>
+    </section>
+
+    <section class="game-column">
+      <div class="game-header">
+        <h1>Frickin' awesome Snake Game!</h1>
+        <img src="./img/snake.png" alt="snake_pic" />
+      </div>
+      <div class="game-board">
+        <div class="start-modal">Press any arrow key to start</div>
+      </div>
+    </section>
+    <section class="game-scores-column">
+      <button class="reset-game-btn">Reset game</button>
+      <ol>
+        <li>Michlon 1000</li>
+        <li>Nikodem 900</li>
+        <li>Miki 700</li>
+        <li>Błażej 200</li>
+        <li>Lechu 140</li>
+      </ol>
+    </section>
+  </body>
 </html>

@@ -1,25 +1,131 @@
+// Modal & form and getting previous settings from localStorage
+
+const currentSettings = (JSON.parse(localStorage.getItem('MY_DATA'))) || {} 
+
+const form = document.querySelector('form')
+form.username.value = currentSettings.USER_NAME || '';
+form.snakespeed.value = currentSettings.SNAKE_SPEED;
+form.expansionrate.value = currentSettings.EXPANSION_RATE;
+
+const formModal = document.querySelector('.modal')
+let USER_NAME = '';
+let SNAKE_SPEED = 0;
+let EXPANSION_RATE = 0;
+let WALLS_ON_OFF = 0;
+let score = 0;
+const closeModal = (item) => item.classList.add('modal--hidden');
+
+const getFormData = (e) => {
+	e.preventDefault();
+
+    USER_NAME = form.username.value;
+    SNAKE_SPEED = form.snakespeed.value;
+    EXPANSION_RATE = form.expansionrate.value;
+    WALLS_ON_OFF = form.walls.value;
+    closeModal(formModal);
+    renderSettings();
+    saveInLocalStorage();
+};
+
+form.addEventListener('submit', getFormData);
+
+// Initialize Firebase & save score in Firestore
+firebase.initializeApp(firebaseConfig);
+
+function saveinFirestore(){
+    const scoreObject = {
+        username: USER_NAME,
+        score
+    }
+    console.log(scoreObject)
+    debugger
+    firebase.firestore().collection('snake-game-scores').add(scoreObject)
+}
+
+// Save user data in localStorage 
+
+function saveInLocalStorage(){
+    const settingsArray = {USER_NAME, SNAKE_SPEED, EXPANSION_RATE};
+    localStorage.setItem('MY_DATA', JSON.stringify(settingsArray))
+}
+
+// Render settings
+
+const userInfo = document.querySelector('.user-info');
+const gameTimeInfo = document.querySelector('.game-time-info');
+const scoreInfo = document.querySelector('.score-info');
+const snakeSpeedInfo = document.querySelector('.snake-speed-info');
+const snakeExpansionInfo = document.querySelector('.snake-expansion-info');
+const wallsInfo = document.querySelector('.walls-info');
+
+const renderSettings = () => {
+    userInfo.innerHTML = `User: ${USER_NAME}`;
+    snakeSpeedInfo.innerHTML = `Snake Speed: ${SNAKE_SPEED}` 
+    snakeExpansionInfo.innerHTML = `Snake Expansion Rate: ${EXPANSION_RATE}` 
+    wallsInfo.innerHTML = `Walls: ${WALLS_ON_OFF}`  
+}
+
+const renderScoreTime = () => {
+    printTime()
+    // gameTimeInfo.innerHTML = `Game time: ${lastUpdateTime}`;
+    score = ((lastUpdateTime/1000)*SNAKE_SPEED*EXPANSION_RATE).toFixed(0);
+    scoreInfo.innerHTML = `Your score: ${score}`;
+}
+
+
+///
+function printTime(){
+    let displayTime = lastUpdateTime.toFixed(0);
+    let displayTimeMinutes = Math.floor(displayTime/60000) // in min
+    let displayTimeSeconds = Math.floor((displayTime % 60000)/1000) // in s
+    if (displayTimeSeconds< 10){
+        gameTimeInfo.innerHTML = `Game time: ${displayTimeMinutes}:0${displayTimeSeconds}`
+    } else {
+        gameTimeInfo.innerHTML = `Game time: ${displayTimeMinutes}:${displayTimeSeconds}`
+    }
+    
+}
+
 // 00. GAME ELEMENTS & USER VARIABLES //////////////////////////////////////
 // Ciało snake'a będzie reprezentowane jako array obiektów zawierających pozycje x i y, które potem odniesiemy do grida
 const snakeBody = [{x:10, y:11}]
 let victim = { x:10, y:1}
 const gameBoard = document.querySelector('.game-board');
 let gameOver = false;
-// poniższe stałe można zmieniać celem zmiany poziomu trudności
-const SNAKE_SPEED = 5;
-const EXPANSION_RATE = 1;
 
 // 01. GAME ENGINE //////////////////////////////////////////////////////////
 // Funkcja poniżej warunkuje jak często następuje update i render całej gry, dwiema zasadniczymi zmiennymi są tu 'currentTime' i 'lastUpdateTime' i one są tu porównywane. currentTime jest zdefiniowany odgórnie, nastomiast lastUpdateTime zaczynamy od 0 a potem po każdym requestAnimationFrame przypisujemy mu wartość currentTime. Dzięki temu jesteśmy w stanie operować rożnicą czasu pomiędzy dwoma kolejnymi iteracjami i definiujemy to jako timeSinceLastUpdate=(currentTime-LastUpdateTime)/1000 żeby było w s, a nie w ms. Następnie możemy ustalić jak często nasze iteracje mają następować , czyli jak często będziemy updatować i renderować grę. Służy nam do tego stała SNAKE_SPEED [1/s], której wartość oznacza ilość iteracji na sekundę. Tworząc poniższy warunek if definiujemy co ile s gra ma być updatowana (np. SNAKE_SPEED = 0,2 [1/s]) => gra będzie updateowana tylko jeśli iteracje będą co najmniej co 5s, a jeśli = 5 => gra będzie updateowana 5 razy na sekundę. I tylko wtedy wywołujemy funkcje render i update. Niżej wywołuję requestAnimationFrame po raz pierwszy.
 
+let state = 'notStarted'
+const startModal = document.querySelector('.start-modal')
+
+window.addEventListener('keydown', event => {
+    if (state === 'notStarted'){
+    switch (event.key){
+        case 'ArrowUp':
+        case 'ArrowDown':
+        case 'ArrowLeft':
+        case 'ArrowRight':
+            closeModal(startModal)
+            window.requestAnimationFrame(gameEngine);
+            state = 'started'
+    }
+    } else {
+        return
+    }
+})
+
 let lastUpdateTime = 0;
 function gameEngine(currentTime){
     if(gameOver){
-        if(confirm('GAME OVER press ok to restart')){
+        if(confirm('GAME OVER press ok to save your score and restart')){
+            saveinFirestore();
             window.location.reload()
         }
         return
     }
 
+    console.log(lastUpdateTime)
     window.requestAnimationFrame(gameEngine);
     const timeSinceLastUpdate = (currentTime - lastUpdateTime)/1000;
     if (timeSinceLastUpdate < 1 / SNAKE_SPEED) return
@@ -28,12 +134,14 @@ function gameEngine(currentTime){
     update();
     render();
 }
-window.requestAnimationFrame(gameEngine);
+
+
 
 function render(){
     gameBoard.innerHTML = ``;
     renderSnake();
-    renderVictim()
+    renderVictim();
+    renderScoreTime();
 }
 
 function update(){
@@ -122,9 +230,7 @@ function renderVictim(){
 function eatVictim(){
     if (onSnake(victim)){
         expandSnake()
-        // victim = { x: 20, y: 10 }
-        victim = randomVictimPosition()
-        console.log(victim)
+        victim = randomVictimPosition() // victim = { x: 20, y: 10 }
     }
 }
 
@@ -182,3 +288,8 @@ function snakeIntersection(){
 }
 
 // Co chcę dodać sam później: 0.uprość kod podobnie jak zrobiłeś z randomVictimPosition 1.wyświetlacz wyników i zapisywanie wyników, możliwość resetowania gry itd 2.przy włączaniu gry wpisywanie nazwy użytkownika i potem zapisywanie wyników poszczególnych użytkowników 3.możliwość ustawiania SNAKE_SPEED i EXPANSION_RATE na stronie 4.włączanie i wyłączanie ścian 5.teleport 
+
+
+
+
+
