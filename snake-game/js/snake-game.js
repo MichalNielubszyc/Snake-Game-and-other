@@ -1,6 +1,6 @@
 // Modal & form and getting previous settings from localStorage
 
-const currentSettings = (JSON.parse(localStorage.getItem('MY_DATA'))) || {} 
+const currentSettings = (JSON.parse(localStorage.getItem('SNAKE_DATA'))) || {} 
 
 const form = document.querySelector('form')
 form.username.value = currentSettings.USER_NAME || '';
@@ -14,6 +14,7 @@ let EXPANSION_RATE = 0;
 let WALLS_ON_OFF = 0;
 let score = 0;
 const closeModal = (item) => item.classList.add('modal--hidden');
+const showModal = (item) => item.classList.remove('modal--hidden');
 
 const getFormData = (e) => {
 	e.preventDefault();
@@ -23,6 +24,7 @@ const getFormData = (e) => {
     EXPANSION_RATE = form.expansionrate.value;
     WALLS_ON_OFF = form.walls.value;
     closeModal(formModal);
+    showModal(startModal); // czemu nie odpala przy resecie?
     renderSettings();
     saveInLocalStorage();
 };
@@ -30,6 +32,17 @@ const getFormData = (e) => {
 form.addEventListener('submit', getFormData);
 
 // Initialize Firebase & save score in Firestore
+
+// Your web app's Firebase configuration
+var firebaseConfig = {
+    apiKey: "AIzaSyD_cQ0AFuKqdh1hrUWHD1snUJmTp2J_KC4",
+    authDomain: "frickinawesomesnakegame.firebaseapp.com",
+    projectId: "frickinawesomesnakegame",
+    storageBucket: "frickinawesomesnakegame.appspot.com",
+    messagingSenderId: "198386238996",
+    appId: "1:198386238996:web:c658d4154c4206c88e4901"
+  };
+
 firebase.initializeApp(firebaseConfig);
 
 function saveinFirestore(){
@@ -38,15 +51,17 @@ function saveinFirestore(){
         score
     }
     console.log(scoreObject)
-    debugger
-    firebase.firestore().collection('snake-game-scores').add(scoreObject)
+    // firebase.firestore().collection('snakeScores').add(scoreObject)
+    firebase.firestore().collection('snakeScores').doc().set(scoreObject)
+    .then(console.log('success'))
+    .catch(console.log('ooops, not working'))
 }
 
 // Save user data in localStorage 
 
 function saveInLocalStorage(){
     const settingsArray = {USER_NAME, SNAKE_SPEED, EXPANSION_RATE};
-    localStorage.setItem('MY_DATA', JSON.stringify(settingsArray))
+    localStorage.setItem('SNAKE_DATA', JSON.stringify(settingsArray))
 }
 
 // Render settings
@@ -67,13 +82,10 @@ const renderSettings = () => {
 
 const renderScoreTime = () => {
     printTime()
-    // gameTimeInfo.innerHTML = `Game time: ${lastUpdateTime}`;
     score = ((lastUpdateTime/1000)*SNAKE_SPEED*EXPANSION_RATE).toFixed(0);
     scoreInfo.innerHTML = `Your score: ${score}`;
 }
 
-
-///
 function printTime(){
     let displayTime = lastUpdateTime.toFixed(0);
     let displayTimeMinutes = Math.floor(displayTime/60000) // in min
@@ -83,7 +95,6 @@ function printTime(){
     } else {
         gameTimeInfo.innerHTML = `Game time: ${displayTimeMinutes}:${displayTimeSeconds}`
     }
-    
 }
 
 // 00. GAME ELEMENTS & USER VARIABLES //////////////////////////////////////
@@ -119,13 +130,13 @@ let lastUpdateTime = 0;
 function gameEngine(currentTime){
     if(gameOver){
         if(confirm('GAME OVER press ok to save your score and restart')){
+            reset()
             saveinFirestore();
-            window.location.reload()
+            state = 'notStarted'
+            // window.location.reload()
         }
         return
     }
-
-    console.log(lastUpdateTime)
     window.requestAnimationFrame(gameEngine);
     const timeSinceLastUpdate = (currentTime - lastUpdateTime)/1000;
     if (timeSinceLastUpdate < 1 / SNAKE_SPEED) return
@@ -134,8 +145,6 @@ function gameEngine(currentTime){
     update();
     render();
 }
-
-
 
 function render(){
     gameBoard.innerHTML = ``;
@@ -148,6 +157,15 @@ function update(){
     updateSnake();
     eatVictim();
     checkGameOver();
+}
+
+function reset(){
+    window.cancelAnimationFrame(gameEngine);
+    console.log('woah')
+    score = 0;
+    lastUpdateTime = 0
+    renderScoreTime();
+    showModal(formModal);
 }
 
 

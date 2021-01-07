@@ -1,9 +1,9 @@
-// Your web app's Firebase configuration
-  var firebaseConfig = {
-    apiKey: "AIzaSyCaJyXcPJ49UxxoYRvlHhY3l6FfnatxWFU",
-    authDomain: "frickin-awesome-snake-game.firebaseapp.com",
-    projectId: "frickin-awesome-snake-game",
-    storageBucket: "frickin-awesome-snake-game.appspot.com",
-    messagingSenderId: "1090552527375",
-    appId: "1:1090552527375:web:cd4d26e953b006348b817a"
-  };
+// // Your web app's Firebase configuration
+// var firebaseConfig = {
+//   apiKey: "AIzaSyD_cQ0AFuKqdh1hrUWHD1snUJmTp2J_KC4",
+//   authDomain: "frickinawesomesnakegame.firebaseapp.com",
+//   projectId: "frickinawesomesnakegame",
+//   storageBucket: "frickinawesomesnakegame.appspot.com",
+//   messagingSenderId: "198386238996",
+//   appId: "1:198386238996:web:c658d4154c4206c88e4901"
+// };
