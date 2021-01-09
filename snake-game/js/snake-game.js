@@ -27,6 +27,7 @@ const getFormData = (e) => {
     showModal(startModal); // czemu nie odpala przy resecie?
     renderSettings();
     saveInLocalStorage();
+    startGame()
 };
 
 form.addEventListener('submit', getFormData);
@@ -82,7 +83,7 @@ const renderSettings = () => {
 
 const renderScoreTime = () => {
     printTime()
-    score = ((lastUpdateTime/1000)*SNAKE_SPEED*EXPANSION_RATE).toFixed(0);
+    score = (SNAKE_SPEED*EXPANSION_RATE*victimScore).toFixed(0); ////  XXXXXXXXX currentTime nie działa :( 
     scoreInfo.innerHTML = `Your score: ${score}`;
 }
 
@@ -99,7 +100,7 @@ function printTime(){
 
 // 00. GAME ELEMENTS & USER VARIABLES //////////////////////////////////////
 // Ciało snake'a będzie reprezentowane jako array obiektów zawierających pozycje x i y, które potem odniesiemy do grida
-const snakeBody = [{x:10, y:11}]
+let snakeBody = [{x:10, y:11}]
 let victim = { x:10, y:1}
 const gameBoard = document.querySelector('.game-board');
 let gameOver = false;
@@ -110,7 +111,10 @@ let gameOver = false;
 let state = 'notStarted'
 const startModal = document.querySelector('.start-modal')
 
-window.addEventListener('keydown', event => {
+function startGame(){
+    snakeBody = [{x:10, y:11}] ////  XXXXXXXXX reset nie działa :( 
+    victim = { x:10, y:1}
+    window.addEventListener('keydown', event => {
     if (state === 'notStarted'){
     switch (event.key){
         case 'ArrowUp':
@@ -125,14 +129,15 @@ window.addEventListener('keydown', event => {
         return
     }
 })
+}
 
 let lastUpdateTime = 0;
 function gameEngine(currentTime){
     if(gameOver){
         if(confirm('GAME OVER press ok to save your score and restart')){
-            reset()
             saveinFirestore();
             state = 'notStarted'
+            reset()
             // window.location.reload()
         }
         return
@@ -161,7 +166,6 @@ function update(){
 
 function reset(){
     window.cancelAnimationFrame(gameEngine);
-    console.log('woah')
     score = 0;
     lastUpdateTime = 0
     renderScoreTime();
@@ -185,8 +189,6 @@ function renderSnake(){
 // 03. UPDATING SNAKE /////////////////////////////////////////////////////
 // Tworzę petlę for, w której snakeBody[i] oznacza przedostatni obiekt tablicy snakeBody, a snakeBody[i+1] - ostatni. Przypisując ostatniemu przedostatni przy każdej iteracji ostatni element "przesuwa się" o jedną pozycję do przodu. Przypisanie musi tworzyć duplikat obiektu ({...object}), a nie przypisywać dokładnie ten sam obiekt, żeby uniknąć problemu z referance. 
 
-//?????Nie wiem czemu i-- oraz i>=0 ???????? 
-
 function updateSnake(){
     const snakeMovement = getUserDirections();
     addCells();
@@ -196,8 +198,6 @@ function updateSnake(){
     // Zwiększamy głowie snake'a (snakeBody[0]) wartość x o wartość zmiennej snakeMovement, którą pobieram z obiektu userDirections. UserDirections zmienia się poprzez dodanie eventlistenera ze switchem dla eventu keydown obejmującego strzałki (04). Dzięki czemu wprawiamy snake'a w ruch.
     snakeBody[0].x += snakeMovement.x
     snakeBody[0].y += snakeMovement.y
-
-    
 }
 
 // 04. USER DIRECTIONS ////////////////////////////////////////////////////////
@@ -245,10 +245,13 @@ function renderVictim(){
 // 06. EATING VICTIM /////////////////////////////////////////////////////////
 // Funkcja eatVictim() zarządza całym zdarzeniem, gdy którakolwiek komórka snake'a pokrywa się z komórką victima. W tym celu sprawdza warunek z funkcją onSnake(). Jeśli jest ona prawdziwa, wywołuje dwa wyrażenia - funkcję expandSnake, która wydłuża snake'a o zadany EXPANSION_RATE oraz przypisanie obiektowi victim nowych współrzędnych. Funkcja onSnake() sprawdza czy którakolwiek komórka snake'a pokrywa się z victimem. Posługuje się przy tym metodą .some wywołaną na arrayu snakeBody. Funkcja wywołuje kolejną funkcję equalPositions, która ma za argumenty komórkę snake'a i argument przywołany w onSnake (czyli w naszym przypadku będzie tam victim) i wówczas porównuje współrzędne x i y obu tych argumentów. Funkcje onSnake i equalPositions zwracają boolean, także funkcja główna będzie wywołana tylko jeśli oba będą spełnione. Główna funkcja eatVictim jest przekazana do funkcji update(), która jest iterowana co określony przez SNAKE_SPEED czas.
 
+let victimScore = 0;
+
 function eatVictim(){
     if (onSnake(victim)){
         expandSnake()
         victim = randomVictimPosition() // victim = { x: 20, y: 10 }
+        victimScore = victimScore + 1;
     }
 }
 
