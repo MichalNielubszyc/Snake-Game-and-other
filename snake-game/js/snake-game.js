@@ -16,15 +16,17 @@ let score = 0;
 const closeModal = (item) => item.classList.add('modal--hidden');
 const showModal = (item) => item.classList.remove('modal--hidden');
 
-const getFormData = (e) => {
-	e.preventDefault();
+let state;
 
+const getFormData = (e) => {
+    e.preventDefault();
+    state = 'notStarted'
     USER_NAME = form.username.value;
     SNAKE_SPEED = form.snakespeed.value;
     EXPANSION_RATE = form.expansionrate.value;
     WALLS_ON_OFF = form.walls.value;
     closeModal(formModal);
-    showModal(startModal); // czemu nie odpala przy resecie?
+    showModal(startModal);
     renderSettings();
     saveInLocalStorage();
     startGame()
@@ -32,30 +34,56 @@ const getFormData = (e) => {
 
 form.addEventListener('submit', getFormData);
 
-// Initialize Firebase & save score in Firestore
-
-// Your web app's Firebase configuration
-var firebaseConfig = {
-    apiKey: "AIzaSyD_cQ0AFuKqdh1hrUWHD1snUJmTp2J_KC4",
-    authDomain: "frickinawesomesnakegame.firebaseapp.com",
-    projectId: "frickinawesomesnakegame",
-    storageBucket: "frickinawesomesnakegame.appspot.com",
-    messagingSenderId: "198386238996",
-    appId: "1:198386238996:web:c658d4154c4206c88e4901"
-  };
+// Initialize Firebase, render best scores & save score in Firestore
 
 firebase.initializeApp(firebaseConfig);
+
+firebase.firestore().collection('snakeScores').onSnapshot((scoresDocuments) => renderPreviousScores(scoresDocuments));
 
 function saveinFirestore(){
     const scoreObject = {
         username: USER_NAME,
         score
     }
-    console.log(scoreObject)
-    // firebase.firestore().collection('snakeScores').add(scoreObject)
     firebase.firestore().collection('snakeScores').doc().set(scoreObject)
-    .then(console.log('success'))
-    .catch(console.log('ooops, not working'))
+}
+
+const scoresContainer = document.querySelector('.scores-section')
+let listExists = false
+
+let scoresArray = [];
+
+function renderPreviousScores(documents) {
+
+    documents.forEach((document) => {
+        const data = document.data();
+        scoresArray.push(data)
+    })
+    console.log(scoresArray, typeof(scoresArray))
+    // const topScores = scoresArray.sort((a.score,b.score) => b.score-a.score);
+    
+    const topScores = scoresArray.sort((a,b) => {
+        return b.score - a.score;
+    })
+
+    const topTenScores = topScores.slice(0,10) 
+
+    console.log(topTenScores)
+
+    if (listExists){
+            const previousList = document.querySelector('ol')
+            previousList.remove()
+        }
+    const list = document.createElement('ol');
+    let html = '';
+    
+    topTenScores.forEach((document) => {
+        html += `<li class="single-score">${document.username} : ${document.score}</li>`
+    });
+        
+    list.innerHTML = html;
+    scoresContainer.appendChild(list)
+    listExists = true;
 }
 
 // Save user data in localStorage 
@@ -100,22 +128,25 @@ function printTime(){
 
 // 00. GAME ELEMENTS & USER VARIABLES //////////////////////////////////////
 // Ciało snake'a będzie reprezentowane jako array obiektów zawierających pozycje x i y, które potem odniesiemy do grida
-let snakeBody = [{x:10, y:11}]
-let victim = { x:10, y:1}
+
+let snakeBody = [];
+let victim = {};
 const gameBoard = document.querySelector('.game-board');
 let gameOver = false;
 
 // 01. GAME ENGINE //////////////////////////////////////////////////////////
 // Funkcja poniżej warunkuje jak często następuje update i render całej gry, dwiema zasadniczymi zmiennymi są tu 'currentTime' i 'lastUpdateTime' i one są tu porównywane. currentTime jest zdefiniowany odgórnie, nastomiast lastUpdateTime zaczynamy od 0 a potem po każdym requestAnimationFrame przypisujemy mu wartość currentTime. Dzięki temu jesteśmy w stanie operować rożnicą czasu pomiędzy dwoma kolejnymi iteracjami i definiujemy to jako timeSinceLastUpdate=(currentTime-LastUpdateTime)/1000 żeby było w s, a nie w ms. Następnie możemy ustalić jak często nasze iteracje mają następować , czyli jak często będziemy updatować i renderować grę. Służy nam do tego stała SNAKE_SPEED [1/s], której wartość oznacza ilość iteracji na sekundę. Tworząc poniższy warunek if definiujemy co ile s gra ma być updatowana (np. SNAKE_SPEED = 0,2 [1/s]) => gra będzie updateowana tylko jeśli iteracje będą co najmniej co 5s, a jeśli = 5 => gra będzie updateowana 5 razy na sekundę. I tylko wtedy wywołujemy funkcje render i update. Niżej wywołuję requestAnimationFrame po raz pierwszy.
 
-let state = 'notStarted'
 const startModal = document.querySelector('.start-modal')
 
 function startGame(){
-    snakeBody = [{x:10, y:11}] ////  XXXXXXXXX reset nie działa :( 
+    snakeBody = [{x:10, y:11}] 
     victim = { x:10, y:1}
+    render()
     window.addEventListener('keydown', event => {
-    if (state === 'notStarted'){
+    if (state === 'started'){
+        return
+    } else if (state === 'notStarted'){
     switch (event.key){
         case 'ArrowUp':
         case 'ArrowDown':
@@ -125,18 +156,14 @@ function startGame(){
             window.requestAnimationFrame(gameEngine);
             state = 'started'
     }
-    } else {
-        return
-    }
-})
 }
+})}
 
 let lastUpdateTime = 0;
 function gameEngine(currentTime){
     if(gameOver){
         if(confirm('GAME OVER press ok to save your score and restart')){
             saveinFirestore();
-            state = 'notStarted'
             reset()
             // window.location.reload()
         }
@@ -164,13 +191,20 @@ function update(){
     checkGameOver();
 }
 
+const resetBtn = document.querySelector('.reset-game-btn');
+
 function reset(){
+    state = 'notStarted'
     window.cancelAnimationFrame(gameEngine);
     score = 0;
     lastUpdateTime = 0
     renderScoreTime();
     showModal(formModal);
+    gameOver = false;
+    victimScore = 0;
 }
+
+resetBtn.addEventListener('click', reset)
 
 
 // 02. RENDERING SNAKE /////////////////////////////////////////////////////
