@@ -50,9 +50,11 @@ function saveinFirestore(){
 const scoresContainer = document.querySelector('.scores-section')
 let listExists = false
 
-let scoresArray = [];
+let scoresArray;
 
 function renderPreviousScores(documents) {
+
+    scoresArray = [];
 
     documents.forEach((document) => {
         const data = document.data();
