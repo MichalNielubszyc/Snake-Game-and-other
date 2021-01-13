@@ -24,7 +24,6 @@ const getFormData = (e) => {
     USER_NAME = form.username.value;
     SNAKE_SPEED = form.snakespeed.value;
     EXPANSION_RATE = form.expansionrate.value;
-    WALLS_ON_OFF = form.walls.value;
     closeModal(formModal);
     showModal(startModal);
     renderSettings();
@@ -59,16 +58,12 @@ function renderPreviousScores(documents) {
         const data = document.data();
         scoresArray.push(data)
     })
-    console.log(scoresArray, typeof(scoresArray))
-    // const topScores = scoresArray.sort((a.score,b.score) => b.score-a.score);
     
     const topScores = scoresArray.sort((a,b) => {
         return b.score - a.score;
     })
-
+    
     const topTenScores = topScores.slice(0,10) 
-
-    console.log(topTenScores)
 
     if (listExists){
             const previousList = document.querySelector('ol')
@@ -110,20 +105,11 @@ const renderSettings = () => {
 }
 
 const renderScoreTime = () => {
-    printTime()
-    score = (SNAKE_SPEED*EXPANSION_RATE*victimScore).toFixed(0); ////  XXXXXXXXX currentTime nie działa :( 
-    scoreInfo.innerHTML = `Your score: ${score}`;
-}
-
-function printTime(){
-    let displayTime = lastUpdateTime.toFixed(0);
-    let displayTimeMinutes = Math.floor(displayTime/60000) // in min
-    let displayTimeSeconds = Math.floor((displayTime % 60000)/1000) // in s
-    if (displayTimeSeconds< 10){
-        gameTimeInfo.innerHTML = `Game time: ${displayTimeMinutes}:0${displayTimeSeconds}`
-    } else {
-        gameTimeInfo.innerHTML = `Game time: ${displayTimeMinutes}:${displayTimeSeconds}`
+    score = (SNAKE_SPEED*EXPANSION_RATE*victimScore).toFixed(0); 
+    if (form.wallsoff.checked === true){
+        score = (0.5*score);
     }
+    scoreInfo.innerHTML = `Your score: ${score}`;
 }
 
 // 00. GAME ELEMENTS & USER VARIABLES //////////////////////////////////////
@@ -194,7 +180,8 @@ function update(){
 const resetBtn = document.querySelector('.reset-game-btn');
 
 function reset(){
-    state = 'notStarted'
+    // state = 'notStarted'
+    state = 'reset';
     window.cancelAnimationFrame(gameEngine);
     score = 0;
     lastUpdateTime = 0
@@ -224,6 +211,19 @@ function renderSnake(){
 // Tworzę petlę for, w której snakeBody[i] oznacza przedostatni obiekt tablicy snakeBody, a snakeBody[i+1] - ostatni. Przypisując ostatniemu przedostatni przy każdej iteracji ostatni element "przesuwa się" o jedną pozycję do przodu. Przypisanie musi tworzyć duplikat obiektu ({...object}), a nie przypisywać dokładnie ten sam obiekt, żeby uniknąć problemu z referance. 
 
 function updateSnake(){
+    // Walls
+    if (form.wallsoff.checked === true){
+        if (snakeBody[0].x === 0){
+            snakeBody[0].x = 22;
+        } else if (snakeBody[0].x === 22){
+            snakeBody[0].x = 0
+        } else if (snakeBody[0].y === 0){
+            snakeBody[0].y = 22
+        } else if (snakeBody[0].y === 22){
+            snakeBody[0].y = 0
+        }  
+    }
+
     const snakeMovement = getUserDirections();
     addCells();
     for(let i = snakeBody.length - 2; i>=0; i--){
@@ -232,6 +232,8 @@ function updateSnake(){
     // Zwiększamy głowie snake'a (snakeBody[0]) wartość x o wartość zmiennej snakeMovement, którą pobieram z obiektu userDirections. UserDirections zmienia się poprzez dodanie eventlistenera ze switchem dla eventu keydown obejmującego strzałki (04). Dzięki czemu wprawiamy snake'a w ruch.
     snakeBody[0].x += snakeMovement.x
     snakeBody[0].y += snakeMovement.y
+
+
 }
 
 // 04. USER DIRECTIONS ////////////////////////////////////////////////////////
@@ -328,7 +330,12 @@ function randomVictimPosition(){
 // 09. VERYFYING IF GAME IS OVER ////////////////////////////////////////////////
 
 function checkGameOver() {
-    gameOver = outsideGrid(snakeBody[0]) || snakeIntersection()
+    if (form.wallsoff.checked === true){
+        gameOver = snakeIntersection()
+    } else {
+        gameOver = outsideGrid(snakeBody[0]) || snakeIntersection()
+    }
+    
 }
 
 function outsideGrid(position){
