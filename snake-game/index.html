@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Snake Game</title>
     <link rel="stylesheet" href="./snake.css" />
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
     <script src="./js/firebase-config.js"></script>
@@ -20,18 +21,13 @@
         <label for="username" class="modal_label">Enter username:</label>
         <input type="text" class="modal_input" name="username" required />
         <label for="snakespeed" class="modal_label"
-          >Enter snake speed (1-10):</label
+          >Enter snake speed (1-20):</label
         >
-        <input type="number" class="modal_input" name="snakespeed" required />
+        <input type="number" class="modal_input" name="snakespeed" required min="1" max="20" />
         <label for="expansionrate" class="modal_label"
-          >Enter snake expansion rate (1-10):</label
+          >Enter snake expansion rate (1-20):</label
         >
-        <input
-          type="number"
-          class="modal_input"
-          name="expansionrate"
-          required
-        />
+        <input type="number" class="modal_input" name="expansionrate" required min="1" max="20" />
         <label for="wallsoff" class="modal_label">Turn walls off:</label>
         <input type="checkbox" class="modal_input" name="wallsoff" />
         <input type="submit" class="modal_input" />
@@ -43,6 +39,7 @@
       <div class="snake-speed-info">Snake Speed:</div>
       <div class="snake-expansion-info">Snake Expansion Rate:</div>
       <div class="walls-info">Walls off</div>
+      <button class="reset-game-btn">Reset game</button>
     </section>
 
     <section class="game-column">
@@ -54,7 +51,6 @@
       <div class="start-modal modal--hidden">Press any arrow key to start</div>
     </section>
     <section class="game-scores-column">
-      <button class="reset-game-btn">Reset game</button>
       <div class="scores-section">
         <h1>Best scores:</h1>
       </div>

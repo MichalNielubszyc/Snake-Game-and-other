@@ -101,15 +101,19 @@ const wallsInfo = document.querySelector('.walls-info');
 
 const renderSettings = () => {
     userInfo.innerHTML = `User: ${USER_NAME}`;
-    snakeSpeedInfo.innerHTML = `Snake Speed: ${SNAKE_SPEED}` 
-    snakeExpansionInfo.innerHTML = `Snake Expansion Rate: ${EXPANSION_RATE}` 
-    wallsInfo.innerHTML = `Walls: ${WALLS_ON_OFF}`  
+    snakeSpeedInfo.innerHTML = `Snake Speed: ${SNAKE_SPEED}` ;
+    snakeExpansionInfo.innerHTML = `Snake Expansion Rate: ${EXPANSION_RATE}`;
+    if (form.wallsoff.checked === true){
+        wallsInfo.innerHTML = `Walls: OFF`  
+    } else {
+        wallsInfo.innerHTML = `Walls: ON` 
+    }
 }
 
 const renderScoreTime = () => {
-    score = (SNAKE_SPEED*EXPANSION_RATE*victimScore).toFixed(0); 
+    score = ((SNAKE_SPEED/2)*(EXPANSION_RATE/2)*victimScore).toFixed(0); 
     if (form.wallsoff.checked === true){
-        score = (0.5*score);
+        score = (0.7*score);
     }
     scoreInfo.innerHTML = `Your score: ${score}`;
 }
@@ -129,7 +133,7 @@ const startModal = document.querySelector('.start-modal')
 
 function startGame(){
     snakeBody = [{x:10, y:11}] 
-    victim = { x:10, y:1}
+    victim = { x:10, y:3}
     render()
     window.addEventListener('keydown', event => {
     if (state === 'started'){
